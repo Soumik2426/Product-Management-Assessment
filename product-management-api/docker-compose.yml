@@ -1,0 +1,41 @@
+services:
+  db:
+    image: mysql:8.4
+    container_name: product-management-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: product_management
+      MYSQL_USER: Javauser
+      MYSQL_PASSWORD: Soumik$4321@
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: product-management-api
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:mysql://db:3306/product_management
+      DB_USERNAME: Javauser
+      DB_PASSWORD: Soumik$4321@
+      JWT_SECRET: Stl8mM0qXk1MCXnwSP4W6GEuCPuvLUutu7E2GP0WeXk=
+      JWT_EXPIRATION: 86400000
+      CORS_ALLOWED_ORIGINS: http://localhost:3000,http://localhost:8080
+
+volumes:
+  mysql_data:
