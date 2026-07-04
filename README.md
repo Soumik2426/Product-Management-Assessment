@@ -206,7 +206,7 @@ See `SCALABILITY.md` for the current architecture explanation and future scaling
 
 The application is deployed and can be accessed online.
 
-## Frontend
+## Live Website
 
 **Vercel**
 
